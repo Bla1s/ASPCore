@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ASPCore.Models.Film>
+
+@{
+	ViewData["Title"] = "Home Page";
+}
+
+<h1>Welcome to the Home Page</h1>
+
+<h2>Films</h2>
+
+<div class="film-container">
+	@foreach (var film in Model)
+	{
+		<div class="film-card">
+			<p><strong>Author:</strong> @ViewBag.Authors[film.AuthorId]</p>
+			<p><strong>Release Date:</strong> @film.ReleaseDate</p>
+			<p><strong>Category:</strong> @film.Category</p>
+			<p><strong>Star Rating:</strong> @film.StarRating</p>
+			<a asp-action="Details" asp-controller="Home" asp-route-id="@film.Id" class="btn btn-primary">View Details</a>
+		</div>
+	}
+</div>

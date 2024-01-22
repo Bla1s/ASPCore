@@ -1,0 +1,54 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<ASPCore.Models.Author>
+@{
+ViewData["Title"] = "Index";
+}
+
+<h1>Authors</h1>
+
+<table class="table">
+	<thead>
+	<tr>
+		<th>Id</th>
+		<th>Name</th>
+		<th>Surname</th>
+		<th>Date of Birth</th>
+		<th>Description</th>
+		<th>Films</th>
+		<th></th> <!-- For Update and Delete buttons -->
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+	@foreach (var author in Model)
+	{
+		<tr>
+			<td>@author.Id</td>
+			<td>@author.Name</td>
+			<td>@author.Surname</td>
+			<td>@author.DateOfBirth</td>
+			<td>@author.Description</td>
+			<td>
+				@foreach (var film in author.Films)
+				{
+					<p>@film.Name</p>
+				}
+			</td>
+				<td>
+					<a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@author.Id">
+						Update
+					</a>
+				</td>
+				<td>
+					<form asp-action="Delete" asp-route-id="@author.Id" method="post">
+						<button type="submit" class="btn btn-sm btn-danger">
+							Delete
+						</button>
+					</form>
+				</td>
+		</tr>
+	}
+	</tbody>
+</table>
