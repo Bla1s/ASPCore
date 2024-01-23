@@ -1,4 +1,5 @@
 ﻿using ASPCore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ namespace ASPCore.Controllers
 		}
 
         // Index action to view all authors
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var authorsWithFilms = await _context.Authors.Include(a => a.Films).ToListAsync();
@@ -22,7 +24,8 @@ namespace ASPCore.Controllers
 
         // Create action (GET)
         [HttpGet]
-		public IActionResult Create()
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create()
 		{
 			return View();
 		}
@@ -30,7 +33,8 @@ namespace ASPCore.Controllers
 		// Create action (POST)
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(Author author)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create(Author author)
 		{
 			if (ModelState.IsValid)
 			{
@@ -39,7 +43,6 @@ namespace ASPCore.Controllers
 					Name = author.Name,
 					Surname = author.Surname,
 					DateOfBirth = author.DateOfBirth,
-					Description = author.Description
 				};
 
 				_context.Authors.Add(newAuthor);
@@ -59,7 +62,8 @@ namespace ASPCore.Controllers
 			return View(author);
 		}
 		[HttpGet]
-		public async Task<IActionResult> Update(int? id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Update(int? id)
 		{
 			if (id == null)
 			{
@@ -78,7 +82,8 @@ namespace ASPCore.Controllers
 		// Update action (POST)
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Update(int id, Author author)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Update(int id, Author author)
 		{
 			if (id != author.Id)
 			{
@@ -111,7 +116,8 @@ namespace ASPCore.Controllers
 		// Delete action (POST)
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Delete(int id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
 		{
 			var author = await _context.Authors.FindAsync(id);
 			_context.Authors.Remove(author);

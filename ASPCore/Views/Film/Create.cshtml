@@ -1,7 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model ASPCore.Models.Film
+@model ASPCore.Models.FilmViewModel
 @{
 ViewData["Title"] = "Create";
 }
@@ -38,11 +38,6 @@ ViewData["Title"] = "Create";
 		<label asp-for="Description"></label>
 		<input asp-for="Description" />
 		<span asp-validation-for="Description"></span>
-	</div>
-	<div>
-		<label asp-for="StarRating"></label>
-		<input asp-for="StarRating" />
-		<span asp-validation-for="StarRating"></span>
 	</div>
 	<div class="form-group">
 		<label asp-for="Image" class="control-label"></label>

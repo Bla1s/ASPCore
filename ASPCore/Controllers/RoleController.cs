@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ASPCore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ namespace ASPCore.Controllers
             roleManager = roleMgr;
             userManager = userMrg;
         }
-
+        [Authorize(Roles = "Admin")]
         public ViewResult Index() => View(roleManager.Roles);
 
         private void Errors(IdentityResult result)
@@ -23,10 +24,11 @@ namespace ASPCore.Controllers
             foreach (IdentityError error in result.Errors)
                 ModelState.AddModelError("", error.Description);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Create() => View();
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Required] string name)
         {
             if (ModelState.IsValid)
@@ -40,6 +42,7 @@ namespace ASPCore.Controllers
             return View(name);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             IdentityRole role = await roleManager.FindByIdAsync(id);
@@ -55,6 +58,7 @@ namespace ASPCore.Controllers
                 ModelState.AddModelError("", "No role found");
             return View("Index", roleManager.Roles);
         }
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(string id)
         {
             IdentityRole role = await roleManager.FindByIdAsync(id);
@@ -74,6 +78,7 @@ namespace ASPCore.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(RoleModification model)
         {
             IdentityResult result;

@@ -1,4 +1,5 @@
 ﻿using ASPCore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ namespace ASPCore.Controllers
 			passwordHasher = passwordHash;
 		}
 
-
+		[Authorize(Roles = "Admin")]
 		public IActionResult Index()
 		{
 			return View(userManager.Users);
@@ -23,7 +24,8 @@ namespace ASPCore.Controllers
 		public ViewResult Create() => View();
 
 		[HttpPost]
-		public async Task<IActionResult> Create(User user)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create(User user)
 		{
 			if (ModelState.IsValid)
 			{
@@ -55,7 +57,8 @@ namespace ASPCore.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Update(string id, string email, string password)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Update(string id, string email, string password)
 		{
 			AppUser user = await userManager.FindByIdAsync(id);
 			if (user != null)
@@ -90,7 +93,8 @@ namespace ASPCore.Controllers
 				ModelState.AddModelError("", error.Description);
 		}
 		[HttpPost]
-		public async Task<IActionResult> Delete(string id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(string id)
 		{
 			AppUser user = await userManager.FindByIdAsync(id);
 			if (user != null)

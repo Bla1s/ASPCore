@@ -5,22 +5,31 @@
 @{
 	ViewData["Title"] = "UPDATE USER";
 }
-<h1 class="bg-info text-white">Update User</h1>
-<a asp-action="Index" class="btn btn-secondary">Back</a>
-<div asp-validation-summary="All" class="text-danger"></div>
+<div class="container mt-5">
+	<h1 class="text-center bg-info text-white">Update User</h1>
+	<div class="row justify-content-center">
+		<div class="col-md-6">
+			<a asp-action="Index" class="btn btn-secondary mb-3">Back</a>
+			<div asp-validation-summary="All" class="text-danger"></div>
 
-<form asp-action="Update" method="post">
-	<div class="form-group">
-		<label asp-for="Id"></label>
-		<input asp-for="Id" class="form-control" disabled />
+			<form asp-action="Update" method="post">
+				<div class="form-group">
+					<label asp-for="Id"></label>
+					<input asp-for="Id" class="form-control" disabled />
+				</div>
+				<div class="form-group">
+					<label asp-for="Email"></label>
+					<input asp-for="Email" class="form-control" />
+					<span asp-validation-for="Email" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input name="password" class="form-control" />
+					<!-- If you have a property for password in your model, you can use asp-validation-for to display validation messages -->
+					<!-- <span asp-validation-for="Password" class="text-danger"></span> -->
+				</div>
+				<button type="submit" class="btn btn-primary">Save</button>
+			</form>
+		</div>
 	</div>
-	<div class="form-group">
-		<label asp-for="Email"></label>
-		<input asp-for="Email" class="form-control" />
-	</div>
-	<div class="form-group">
-		<label for="password">Password</label>
-		<input name="password" class="form-control" />
-	</div>
-	<button type="submit" class="btn btn-primary">Save</button>
-</form>
+</div>

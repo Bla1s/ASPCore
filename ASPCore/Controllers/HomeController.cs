@@ -19,14 +19,33 @@ namespace ASPCore.Controllers
 		}
 
 		/*[Authorize]*/
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(int? authorId, Category? category, bool? ascending)
 		{
-			var films = await _context.Films.ToListAsync();
-			var authors = await _context.Authors.ToDictionaryAsync(a => a.Id, a => a.Name);
+			var films = _context.Films.Include(f => f.Comments).AsQueryable(); // Include the comments
 
+			if (authorId.HasValue)
+			{
+				films = films.Where(f => f.AuthorId == authorId.Value);
+			}
+
+			if (category.HasValue)
+			{
+				films = films.Where(f => f.Category == category.Value);
+			}
+
+			var filmList = await films.ToListAsync();
+
+			if (ascending.HasValue)
+			{
+				filmList = ascending.Value
+					? filmList.OrderBy(f => f.AverageStarRating).ToList()
+					: filmList.OrderByDescending(f => f.AverageStarRating).ToList();
+			}
+
+			var authors = await _context.Authors.ToDictionaryAsync(a => a.Id, a => a.Name + " " + a.Surname);
 			ViewBag.Authors = authors;
 
-			return View(films);
+			return View(filmList);
 		}
 		public async Task<IActionResult> Details(int? id)
 		{
@@ -48,6 +67,32 @@ namespace ASPCore.Controllers
 			}
 
 			return View(film);
+		}
+		public IActionResult ByAuthor(int authorId)
+		{
+			var films = _context.Films.Include(f => f.Comments)
+				.Where(f => f.AuthorId == authorId)
+				.ToList();
+
+			return View("Index", films);
+		}
+
+		public IActionResult ByCategory(Category category)
+		{
+			var films = _context.Films.Include(f => f.Comments)
+				.Where(f => f.Category == category)
+				.ToList();
+
+			return View("Index", films);
+		}
+
+		public IActionResult ByRating(bool ascending)
+		{
+			var films = ascending
+				? _context.Films.OrderBy(f => f.AverageStarRating).ToList()
+				: _context.Films.OrderByDescending(f => f.AverageStarRating).ToList();
+
+			return View("Index", films);
 		}
 		[Authorize]
 		public IActionResult AddComment(int id)
@@ -92,9 +137,9 @@ namespace ASPCore.Controllers
 		}
 		[HttpPost]
 		[Authorize] // Ensure that only logged-in users can access this action
-		public async Task<IActionResult> DeleteComment(int id)
+		public async Task<IActionResult> DeleteComment(int commentId)
 		{
-			var comment = await _context.Comments.FindAsync(id);
+			var comment = await _context.Comments.FindAsync(commentId);
 			if (comment == null)
 			{
 				return NotFound();
@@ -111,5 +156,6 @@ namespace ASPCore.Controllers
 
 			return RedirectToAction(nameof(Index)); // Redirect to the index action after deleting the comment
 		}
+
 	}
 }

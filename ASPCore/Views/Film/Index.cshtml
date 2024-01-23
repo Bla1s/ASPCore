@@ -7,7 +7,7 @@ ViewData["Title"] = "Index";
 }
 
 <h1>Films</h1>
-
+<a asp-action="Create" class="btn btn-secondary">Create a Film</a>
 <table class="table">
 	<thead>
 	<tr>
@@ -32,7 +32,7 @@ ViewData["Title"] = "Index";
 			<td>@film.ReleaseDate</td>
 			<td>@film.Category</td>
 			<td>@film.Description</td>
-			<td>@film.StarRating</td>
+			<td>@film.AverageStarRating.ToString("F2")</td>
 			<td>
 				<a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@film.Id">
 					Update

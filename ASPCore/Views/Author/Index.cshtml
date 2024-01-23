@@ -7,7 +7,7 @@ ViewData["Title"] = "Index";
 }
 
 <h1>Authors</h1>
-
+<a asp-action="Create" class="btn btn-secondary">Create an Author</a>
 <table class="table">
 	<thead>
 	<tr>
@@ -15,7 +15,6 @@ ViewData["Title"] = "Index";
 		<th>Name</th>
 		<th>Surname</th>
 		<th>Date of Birth</th>
-		<th>Description</th>
 		<th>Films</th>
 		<th></th> <!-- For Update and Delete buttons -->
 		<th></th>
@@ -29,7 +28,6 @@ ViewData["Title"] = "Index";
 			<td>@author.Name</td>
 			<td>@author.Surname</td>
 			<td>@author.DateOfBirth</td>
-			<td>@author.Description</td>
 			<td>
 				@foreach (var film in author.Films)
 				{

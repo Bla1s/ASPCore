@@ -1,4 +1,5 @@
 ﻿using ASPCore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,18 +15,22 @@ namespace ASPCore.Controllers
 		{
 			_context = context;
 		}
-
-		public async Task<IActionResult> Index()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Index()
 		{
-			var films = await _context.Films.ToListAsync();
-			var authors = await _context.Authors.ToDictionaryAsync(a => a.Id, a => a.Name);
+            var films = await _context.Films
+                .Include(f => f.Comments) // Include the Comments in the query
+                .ToListAsync();
 
-			ViewBag.Authors = authors;
+            var authors = await _context.Authors.ToDictionaryAsync(a => a.Id, a => a.Name);
 
-			return View(films);
-		}
+            ViewBag.Authors = authors;
+
+            return View(films);
+        }
 		[HttpGet]
-		public IActionResult Create()
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create()
 		{
 			ViewBag.Authors = new SelectList(_context.Authors, "Id", "Name");
 			return View();
@@ -33,45 +38,48 @@ namespace ASPCore.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(Film film)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create(FilmViewModel filmViewModel)
 		{
 			if (ModelState.IsValid)
 			{
-				var author = await _context.Authors.FindAsync(film.AuthorId);
+				var author = await _context.Authors.FindAsync(filmViewModel.AuthorId);
 				if (author == null)
 				{
 					ModelState.AddModelError("", "Author not found");
-					return View(film);
+					return View(filmViewModel);
 				}
-				if (film.Image != null)
+
+				string fileName = null;
+				if (filmViewModel.Image != null)
 				{
-					var fileName = Path.GetFileName(film.Image.FileName);
+					fileName = Path.GetFileName(filmViewModel.Image.FileName);
 					var filePath = Path.Combine("wwwroot/images", fileName);
 					using (var fileStream = new FileStream(filePath, FileMode.Create))
 					{
-						await film.Image.CopyToAsync(fileStream);
+						await filmViewModel.Image.CopyToAsync(fileStream);
 					}
 				}
 
 				Film newFilm = new Film
 				{
-					Name = film.Name,
-					AuthorId = film.AuthorId,
-					ReleaseDate = film.ReleaseDate,
-					Category = film.Category,
-					Description = film.Description,
-					StarRating = film.StarRating,
-					Image = film.Image
+					Name = filmViewModel.Name,
+					AuthorId = filmViewModel.AuthorId,
+					ReleaseDate = filmViewModel.ReleaseDate,
+					Category = filmViewModel.Category,
+					Description = filmViewModel.Description,
+					ImagePath = fileName != null ? $"~/images/{fileName}" : null
 				};
-				if (author.Films == null)
-                {
-                    author.Films = new List<Film>();
-                }
-                author.Films.Add(newFilm);
 
-                _context.Films.Add(newFilm);
-                _context.Authors.Update(author);
-                await _context.SaveChangesAsync();
+				if (author.Films == null)
+				{
+					author.Films = new List<Film>();
+				}
+				author.Films.Add(newFilm);
+
+				_context.Films.Add(newFilm);
+				_context.Authors.Update(author);
+				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(Index));
 			}
 
@@ -84,10 +92,11 @@ namespace ASPCore.Controllers
 				}
 			}
 
-			return View(film);
+			return View(filmViewModel);
 		}
 		[HttpGet]
-		public async Task<IActionResult> Update(int? id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Update(int? id)
 		{
 			if (id == null)
 			{
@@ -106,7 +115,8 @@ namespace ASPCore.Controllers
 		// Update action (POST)
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Update(int id, Film film)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Update(int id, Film film)
 		{
 			if (id != film.Id)
 			{
@@ -139,9 +149,15 @@ namespace ASPCore.Controllers
 		// Delete action (POST)
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Delete(int id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
 		{
-			var film = await _context.Films.FindAsync(id);
+			var film = await _context.Films.Include(f => f.Comments).FirstOrDefaultAsync(f => f.Id == id);
+			if (film == null)
+			{
+				return NotFound();
+			}
+
 			_context.Films.Remove(film);
 			await _context.SaveChangesAsync();
 			return RedirectToAction(nameof(Index));

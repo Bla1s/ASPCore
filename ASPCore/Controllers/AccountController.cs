@@ -90,6 +90,9 @@ namespace ASPCore.Controllers
             // If we got this far, something failed, redisplay the form
             return View(register);
         }
-
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

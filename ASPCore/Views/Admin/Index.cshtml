@@ -5,35 +5,45 @@
 @{
 	ViewData["Title"] = "READ USER";
 }
-<h1 class="bg-info text-white">All Users</h1>
-<a asp-action="Create" class="btn btn-secondary">Create a User</a>
+<div class="container mt-5">
+	<h1 class="text-center bg-info text-white">All Users</h1>
+	<div class="row justify-content-center">
+		<div class="col-md-10">
+			<a asp-action="Create" class="btn btn-secondary mb-3">Create a User</a>
 
-<table class="table table-sm table-bordered">
-	<tr>
-		<th>ID</th>
-		<th>Name</th>
-		<th>Email</th>
-		<th>Update</th>
-		<th>Delete</th>
-	</tr>
-	@foreach (AppUser user in Model)
-	{
-		<tr>
-			<td>@user.Id</td>
-			<td>@user.UserName</td>
-			<td>@user.Email</td>
-			<td>
-				<a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@user.Id">
-					Update
-				</a>
-			</td>
-			<td>
-				<form asp-action="Delete" asp-route-id="@user.Id" method="post">
-					<button type="submit" class="btn btn-sm btn-danger">
-						Delete
-					</button>
-				</form>
-			</td>
-		</tr>
-	}
-</table>
+			<table class="table table-sm table-bordered">
+				<thead class="thead-dark">
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Update</th>
+					<th>Delete</th>
+				</tr>
+				</thead>
+				<tbody>
+				@foreach (AppUser user in Model)
+				{
+					<tr>
+						<td>@user.Id</td>
+						<td>@user.UserName</td>
+						<td>@user.Email</td>
+						<td>
+							<a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@user.Id">
+								Update
+							</a>
+						</td>
+						<td>
+							<form asp-action="Delete" asp-route-id="@user.Id" method="post">
+								<button type="submit" class="btn btn-sm btn-danger">
+									Delete
+								</button>
+							</form>
+						</td>
+					</tr>
+				}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

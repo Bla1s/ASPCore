@@ -1,25 +1,26 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
+
 .container a {
     font-family: 'Adobe Arabic';
     font-size: 25px;
@@ -59,6 +60,7 @@ table thead {
 table td, table th {
     padding: 10px;
 }
+
 .film-container {
     display: flex;
     flex-wrap: wrap;
@@ -71,4 +73,122 @@ table td, table th {
     margin-bottom: 20px;
     padding: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.filter-form {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    margin-right: 15px;
+    margin-bottom: 15px;
+    flex: 0 0 calc(20% - 15px); /* 20% width with 15px spacing */
+}
+
+.form-control {
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.film-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.film-card {
+    width: 300px;
+    margin: 15px;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-form .btn-primary {
+    height: 40px; /* Set a fixed height for the filter button */
+}
+
+.film-card img {
+    width: 100%;
+    height: 400px; /* Set a fixed height for the images */
+    object-fit: cover; /* Maintain aspect ratio and cover the container */
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.film-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.film-details img {
+    max-width: 500px;
+    max-height: 350px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.details-section {
+    text-align: center;
+}
+
+.details-section p {
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.comments {
+    margin-top: 20px;
+}
+
+.comment {
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.comment p {
+    margin-bottom: 8px;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+.film-details .film-title {
+    /* Your styles for the film title here */
+    font-size: 2.5em;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 15px;
+    text-transform: uppercase;
 }
